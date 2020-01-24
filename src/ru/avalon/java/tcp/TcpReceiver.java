@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -64,7 +66,16 @@ public final class TcpReceiver {
         InputStream stream = socket.getInputStream();
         Reader reader = new InputStreamReader(stream);
         BufferedReader bufferedReader = new BufferedReader(reader);
-        return bufferedReader.readLine();
+        
+        String messageRead = bufferedReader.readLine();
+        String changedMessage = messageRead + " Received and sent back!";
+        
+        OutputStream streamOut = socket.getOutputStream();
+        PrintWriter writer = new PrintWriter(streamOut);
+        writer.println(changedMessage);
+        writer.flush();
+        
+        return messageRead;
     }
 
 }

@@ -1,8 +1,12 @@
 package ru.avalon.java.tcp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -26,6 +30,9 @@ public final class TcpSender {
         Socket socket = connect(address);
         // 4. Отправляем сообщение
         send(socket, message);
+        
+        final String messageChanged = receive(socket);
+        System.out.println(messageChanged);
         // 5. Закрываем соединеие
         socket.close();
     }
@@ -87,8 +94,17 @@ public final class TcpSender {
          */
             OutputStream stream = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(stream);
-            writer.write(message);
-            writer.flush();
+            writer.println(message);
+            writer.flush();                
     }
 
+    private static String receive(Socket socket) throws IOException {
+        /*
+         * TODO Реализовать метод receive класса TcpReceiver
+         */
+        InputStream stream = socket.getInputStream();
+        Reader reader = new InputStreamReader(stream);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        return bufferedReader.readLine();
+    }
 }
